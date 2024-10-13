@@ -1,6 +1,19 @@
+using BLL.Insurance;
+using DAL;
+using DAL.Context;
+using DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
+
+builder.Services.AddDbContext<DbDataContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DB_Seguros")));
+
+builder.Services.AddScoped<IInsuranceRepository, InsuranceRepository>();
+builder.Services.AddScoped<IInsuranceService, InsuranceService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
